@@ -85,7 +85,9 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   Expanded(child: Container()),
                   footer(
-                      title: "Total Price", value: itemsTotalPrice().toString())
+                      title: "Total Price",
+                      value: itemsTotalPrice().toString()),
+                  ElevatedButton(onPressed: () {}, child: Text("Check Out"))
                 ],
               ),
             ),
