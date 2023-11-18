@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:police/add_to_cart.dart';
 import 'package:police/model/item.dart';
+import 'package:police/widgets/chart.dart';
+import 'package:police/widgets/discount.dart';
+import 'package:police/widgets/filter.dart';
+import 'package:police/widgets/header.dart';
+import 'package:police/widgets/qty.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -9,164 +15,229 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<Item> itemsList = [
+  List<Item> itemList = [
     Item(
-        name: "Almarai Fresh Milk 1 Liter",
-        price: 1.5,
-        image:
-            "https://prod-admin-images.s3.ap-south-1.amazonaws.com/pWVdUiFHtKGqyJxESltt/product/6281007040235.jpg"),
+      offerPrice: 2.1,
+      image: "swaar/pizza1.png",
+      name: "White Chicken",
+      descripton: "Spicy Chicken",
+      rate: 4.8,
+      kcal: 510,
+      price: 18.99,
+      proteins: "16,2",
+      carbs: "13,9",
+      fibre: "8,6",
+    ),
     Item(
-        name: "Almarai Fresh Labneh 500g",
-        price: 2.25,
-        image:
-            "https://jebnalak.com/cdn/shop/products/almarai-fresh-labneh-500g-857270_800x.jpg?v=1626527537"),
+      offerPrice: 0.0,
+      image: "swaar/pizza2.png",
+      name: "Original Italian",
+      descripton: "Buffalo mozzarella",
+      rate: 3.9,
+      kcal: 436,
+      price: 12.58,
+      proteins: "11,8",
+      carbs: "21,3",
+      fibre: "6,4",
+    ),
     Item(
-        name: "Almarai Kashkaval Full Fat \nCheese 250g",
-        price: 3.75,
-        image:
-            "https://jebnalak.com/cdn/shop/files/blackfridayoffers-2023-10-10T173032.548_800x.png?v=1696948247"),
-    Item(
-        name: "Almarai Treats Peach \nYoghurt 105g",
-        price: 0.5,
-        image:
-            "https://jebnalak.com/cdn/shop/files/blackfridayoffers-2023-10-09T173525.489_800x.png?v=1696862135"),
-    Item(
-        name: "Almarai Treats Berries \nYoghurt 105g",
-        price: 0.5,
-        image:
-            "https://jebnalak.com/cdn/shop/files/blackfridayoffers-2023-10-09T173633.611_800x.png?v=1696862198"),
-    Item(
-        name: "Almarai Processed Cheddar\nCheese 500g",
-        price: 4.0,
-        image:
-            "https://jebnalak.com/cdn/shop/products/almarai-cheddar-cheese-spread-330989_1024x1024.jpg?v=1621947517"),
-    Item(
-        name: "Almarai Mango & Grape \nJuice 1.4 L",
-        price: 2.5,
-        image:
-            "https://jebnalak.com/cdn/shop/products/image_ef5d0a9b-e051-4f13-ae2e-1005e03c1c45_800x.webp?v=1658986334"),
-    Item(
-        name: "Almarai Farm's Select Juice\nPineapple 1 Liter",
-        price: 3.0,
-        image:
-            "https://jebnalak.com/cdn/shop/products/Untitled-2021-09-25T172527.511_1024x1024@2x.jpg?v=1632579973"),
+      offerPrice: 5.0,
+      image: "swaar/pizza4.png",
+      name: "Meat Mexican",
+      descripton: "Grounded Beef Tacos",
+      rate: 4.2,
+      kcal: 312,
+      price: 10.99,
+      proteins: "10,8",
+      carbs: "18,9",
+      fibre: "7,2",
+    )
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 59, 61, 63),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 59, 61, 63),
-        title: const Text("Shoping App"),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-                itemCount: itemsList.length,
-                itemBuilder: (context, index) {
-                  return tile(
-                    context: context,
-                    item: itemsList[index],
-                  );
-                }),
-          ),
-          Container(
-            height: 100,
-            color: Colors.grey[300],
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
-              child: Row(
-                children: [
-                  footer(
-                    title: "# of Item In Cart",
-                    value: itemsQty().toString(),
-                  ),
-                  Expanded(child: Container()),
-                  footer(
-                      title: "Total Price",
-                      value: itemsTotalPrice().toString()),
-                  ElevatedButton(onPressed: () {}, child: Text("Check Out"))
-                ],
-              ),
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: Column(
+          children: [
+            HeaderView(totalAmount: itemsTotalPrice().toStringAsFixed(2)),
+            // HeaderView(price: totalPrice().toStringAsFixed(2)),
+            const FilterView(),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: itemList.length,
+                  itemBuilder: (context, index) {
+                    return tile(
+                      context: context,
+                      item: itemList[index],
+                    );
+                  }),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  int itemsQty() {
-    int quantity = 0;
-    for (int index = 0; index < itemsList.length; index++) {
-      quantity = quantity + itemsList[index].qty;
-    }
-    return quantity;
-  }
+// int itemsQty() {
+//   int quantity = 0;
+//   for (int index = 0; index < itemsList.length; index++) {
+//     quantity = quantity + itemsList[index].qty;
+//   }
+//   return quantity;
+// }
 
   double itemsTotalPrice() {
     double totalPrice = 0;
-    for (int index = 0; index < itemsList.length; index++) {
-      totalPrice = totalPrice + itemsList[index].qty * itemsList[index].price;
+    for (int index = 0; index < itemList.length; index++) {
+      totalPrice = totalPrice + itemList[index].qty * itemList[index].price;
     }
     return totalPrice;
   }
 
-  Widget footer({required String title, required String value}) {
-    return Column(
-      children: [
-        Text(title),
-        Text(
-          value,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-      ],
-    );
-  }
-
   Widget tile({required BuildContext context, required Item item}) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 25, bottom: 10, right: 25, top: 10),
       child: Container(
-        height: 100,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.grey[200],
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(100.0),
-                  child: Image.network(item.image, width: 85, height: 85)),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: Column(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Stack(
+              children: [
+                Image.asset(
+                  item.image,
+                  width: 150,
+                ),
+                item.qty > 0 ? QtyView(qty: item.qty) : Container(),
+                item.offerPrice > 0
+                    ? DisvountView(offerPrice: item.offerPrice)
+                    : Container()
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 15),
+                Text(
+                  item.name,
+                  style: const TextStyle(fontSize: 17),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  item.descripton,
+                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                ),
+                const SizedBox(height: 5),
+                Row(
                   children: [
-                    Text(item.name),
-                    Text("${item.price} JD"),
+                    Image.asset(
+                      "swaar/star.png",
+                      width: 20,
+                    ),
+                    Text(
+                      "  ${item.rate.toString()}",
+                      style: const TextStyle(
+                          fontSize: 11, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
-              ),
-              Expanded(child: Container()),
-              IconButton(
-                  onPressed: () {
-                    if (item.qty == 0) {
-                      return;
-                    }
+                const SizedBox(height: 10),
+                AddToCartView(
+                  price: item.price,
+                  qty: item.qty,
+                  onMinus: () {
                     item.qty = item.qty - 1;
                     setState(() {});
                   },
-                  icon: const Icon(Icons.remove)),
-              Text(item.qty.toString()),
-              IconButton(
-                  onPressed: () {
+                  onPlus: () {
                     item.qty = item.qty + 1;
                     setState(() {});
                   },
-                  icon: const Icon(Icons.add))
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  chartView(kcal: item.kcal),
+                  const Text(
+                    "Proteins",
+                    style: TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        item.proteins,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                      const Text(
+                        "  gr",
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    "Carbohydrate",
+                    style: TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        item.carbs,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                      const Text(
+                        "  gr",
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    "Fibre",
+                    style: TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        item.fibre,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                      const Text(
+                        "   gr",
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
